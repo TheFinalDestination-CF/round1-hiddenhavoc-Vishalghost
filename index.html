@@ -50,7 +50,7 @@
             color: var(--primary-red);
             text-shadow: 0 0 20px var(--primary-red);
             animation: pulse 2s infinite;
-        
+        }
         @keyframes pulse {
             0%, 100% { text-shadow: 0 0 20px var(--primary-red); }
             50% { text-shadow: 0 0 30px var(--primary-red); }
@@ -101,7 +101,6 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             animation: glow 3s infinite alternate;
-            invalid-property: value;
         }
         @keyframes glow {
             from { filter: drop-shadow(0 0 20px var(--primary-red)); }
@@ -133,7 +132,7 @@
         }
         .cta-button:hover, .submit-btn:hover {
             transform: translateY(-5px) scale(1.05);
-            box-shadow 0 10px 30px rgba(255, 0, 0, 0.5);
+            box-shadow: 0 10px 30px rgba(255, 0, 0, 0.5);
         }
         .section {
             padding: 100px 2rem;
@@ -238,7 +237,7 @@
             0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
             50% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
             100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-        
+        }
         .map-container {
             background: rgba(139, 69, 19, 0.2);
             border: 3px solid var(--golden);
@@ -359,7 +358,7 @@
         <div style="font-size: 2rem;">🏴‍☠️</div>
         <div>Welcome, Treasure Hunter!</div>
         <div style="font-size: 1rem; opacity: 0.9;">Your adventure awaits...</div>
-    
+    </div>
     <nav>
         <div class="logo">FINAL DESTINATION</div>
         <ol class="nav-links">
@@ -441,7 +440,7 @@
                     <div>12,350</div>
                 </div>
                 <div class="leaderboard-row">
-                    <div><span class="rank-badge sliver">2</span></div>
+                    <div><span class="rank-badge silver">2</span></div>
                     <div>Treasure Seeker Sarah</div>
                     <div>43</div>
                     <div>11,890</div>
@@ -491,10 +490,47 @@
     <script>
         cursor = document.getElementById('cursor');
         const greeting = document.getElementById('greeting');
+    setTimeout(() => {
+        greeting.style.opacity = '0';
+        greeting.style.transform = 'translate(-50%, -50%) scale(0.7)';
+        setTimeout(() => greeting.remove(), 1000);
+    }, 4000);
+
+    // Easter Egg: Pirates of the Caribbean theme
+    let easterEggActivated = false;
+    document.addEventListener('keydown', function(e) {
+        // Activate on typing "pirate"
+        window._pirateSeq = window._pirateSeq || '';
+        window._pirateSeq += e.key.toLowerCase();
+        if (window._pirateSeq.endsWith('pirate') && !easterEggActivated) {
+            easterEggActivated = true;
+            // Play Pirates of the Caribbean theme (short audio clip, copyright-free version)
+            const audio = document.createElement('audio');
+            audio.src = 'https://cdn.pixabay.com/audio/2022/07/26/audio_124bfa4c1b.mp3'; // Royalty-free pirate music
+            audio.autoplay = true;
+            audio.volume = 1.0;
+            document.body.appendChild(audio);
+
+            // Show Jack Sparrow Easter Egg
+            const jack = document.createElement('div');
+            jack.style.cssText = `
+                position: fixed; bottom: 30px; right: 30px; z-index: 10002;
+                background: rgba(0,0,0,0.85); color: #ffd700; border-radius: 20px;
+                padding: 1.5rem 2.5rem; font-size: 1.3rem; font-family: 'Creepster', cursive;
+                box-shadow: 0 0 30px #ff0000;
+                display: flex; align-items: center; gap: 1rem;
+                animation: greetingPulse 2s;
+            `;
+            jack.innerHTML = `<span style="font-size:2.5rem;">🏴‍☠️</span> <span>"Not all treasure is silver and gold, mate." <br>– Captain Jack Sparrow</span>`;
+            document.body.appendChild(jack);
+            setTimeout(() => jack.remove(), 7000);
+        }
+        if (window._pirateSeq.length > 12) window._pirateSeq = window._pirateSeq.slice(-12);
+    });
         const treasureCounter = document.getElementById('counterNumber');
         
         let mouseX = 0, mouseY = 0, cursorX = 0, cursorY = 0;
-        let treasuresFound = undefinedVariable; 
+        let treasuresFound = 0;
         
         document.addEventListener('mousemove', e => {
             mouseX = e.clientX;
@@ -566,13 +602,13 @@
                 e.preventDefault();
                 showMessage('Welcome to the Hunt!', 'Your treasure hunting adventure begins now...');
                 e.target.reset();
-            };
+            });
             
             document.querySelectorAll('.map-location').forEach(location => {
                 location.addEventListener('click', () => {
                     if (!location.classList.contains('discovered')) {
                         location.classList.add('discovered');
-                        treasuresFound--; 
+                        treasuresFound++; 
                         treasureCounter.textContent = treasuresFound;
                         createSparkles(location);
                     }
@@ -596,5 +632,6 @@
         
         
     
+    </script>
 </body>
 </html>
